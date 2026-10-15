@@ -1,4 +1,5 @@
-import React from "react";
+import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 
 function RegistrationPage() {
   // local time
@@ -12,9 +13,17 @@ function RegistrationPage() {
 
   const today = getToday();
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
+
   // prevent form submission for now
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (passwordError) {
+      alert("Please fix the password errors before submitting.");
+      return;
+    }
     alert("Registration submitted!");
   };
   const inputClass ="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-gray-700 placeholder-gray-400 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition";
@@ -25,7 +34,7 @@ function RegistrationPage() {
       <div className="w-full max-w-md bg-sky-100 p-8 rounded-2xl shadow-xl border border-gray-100">
 
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">Online Registration</h1>
+          <h1 className="text-3xl font-bold text-gray-800">Create Your Profile</h1>
           <p className="text-gray-500 text-sm mt-2">
             Fill out the form carefully for registration.
           </p>
@@ -56,7 +65,7 @@ function RegistrationPage() {
           </div>
 
           <div>
-            <label className={labelClass} htmlFor="dob">Date of Birth :</label>
+            <label className={labelClass} htmlFor="dob">Date of Birth(DOB) :</label>
             <input
               className={inputClass}
               id="dob"
@@ -77,7 +86,6 @@ function RegistrationPage() {
                 <option value="" disabled>Select gender</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
-                <option value="other">Other</option>
             </select>
           </div>
 
@@ -99,11 +107,42 @@ function RegistrationPage() {
               id="nic"
               name="nic"
               type="text"
-              placeholder="123456789V"
+              placeholder="Sri Lankan NIC"
               pattern="[0-9]{9}[vVxX]|[0-9]{12}"
               title="Enter a valid NIC (e.g., 123456789V or 200012345678)"
               required/>
           </div>
+
+          <div className="relative">
+            <label className={labelClass} htmlFor="password">Password :</label>
+            <input
+              className={inputClass}
+              id="password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="********"
+              required/>
+              <button type="button" onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+          </div>
+
+          <div>
+            <label className={labelClass} htmlFor="confirmPassword">Confirm Password :</label>
+            <input
+              className={inputClass}
+              id="confirmPassword"
+              name="confirmPassword"
+              type={showConfirmPassword ? "text" : "password"}
+              placeholder="********"
+              required/>
+              {passwordError && (
+                <p className="text-red-500 text-sm mt-1">{passwordError}</p>
+                )}
+          </div>
+
+
 
           <button
             className="w-full bg-cyan-500 hover:bg-cyan-600 active:bg-cyan-700 text-white font-bold py-2.5 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 transition duration-200 shadow-md hover:shadow-lg"
